@@ -1,0 +1,95 @@
+extends ../layouts/default-layout.pug
+block content
+  div
+    - var pokedex= pokedex
+    - var learnsets= learnsets
+    - var moves= moves
+    - var basePokedex= basePokedex
+    - var baseLearnsets = baseLearnsets
+    - var baseMoves = baseMoves
+    h1.text-center
+      | Complete Changelog
+    p.text-center
+      | This is the full complete changelon that is based on what is in our showdown server!
+      br
+      | You can find pokemon either by adding a # at the end of the url then place the pokemon you are looking for in.
+      br
+      | Example: https://main.thetraincorner.net/changes/pokemon#cinccino
+      br
+      | or you can use ctrl + f and look.
+    div.alert.alert-danger.text-center(role="alert")
+      | Learnsets are not yet implemented! There was some complications when trying to add Learnsets in.
+    each pokemon in pokedex
+      - var name = pokemon.name.replace(/ /g, "").replace(/-Winter/g, "").replace(/-Autumn/g, "").replace(/-Summer/g, "").replace(/-/g, "").replace(/\./g, "").replace(/é/g, "e").replace(/Pa'u/g, "Pau").replace(/\’/g, "").replace(/:/g, "").replace(/%/g, "").toLowerCase()
+      - var basePokemon = basePokedex[name]
+      - var learnset = learnsets[name]
+      - var baseLearnset = baseLearnsets[name]
+      .card.text-center
+        a(href=`#${name}`, id=name).fs-3.card-title= pokemon.name
+        if !pokemon.tags || !pokemon.tags.includes("Fakemon")
+          img(src=`https://play.pokemonshowdown.com/sprites/gen5/${pokemon.name.replace(/ /g, "").replace(/\./g, "").replace(/é/g, "e").replace(/Pa'u/g, "Pau").replace(/\’/g, "").replace(/:/g, "").replace(/%/g, "").toLowerCase()}.png`, style="width:80px;").card-img-center.mx-auto.d-block
+          p.card-body
+            each type in basePokemon.types
+              if !pokemon.types.includes(type)
+                | Types: #{basePokemon.types.join(" | ")} -> #{pokemon.types.join(" | ")}
+            if basePokemon.abilities[0] !== pokemon.abilities[0] || basePokemon.abilities[1] !== pokemon.abilities[1] || basePokemon.abilities['H'] !== pokemon.abilities['H']
+              | Abilities:
+              br
+              if basePokemon.abilities[0] !== pokemon.abilities[0]
+                | 1st Ability: #{basePokemon.abilities[0]} -> #{pokemon.abilities[0]}
+                br
+              if basePokemon.abilities[1] !== pokemon.abilities[1]
+                | 2nd Ability: #{basePokemon.abilities[1]} -> #{pokemon.abilities[1]}
+                br
+              if basePokemon.abilities['H'] !== pokemon.abilities['H']
+                | Hidden Ability: #{basePokemon.abilities['H']} -> #{pokemon.abilities['H']}
+                br
+            if basePokemon.baseStats.hp !== pokemon.baseStats.hp || basePokemon.baseStats.atk !== pokemon.baseStats.atk || basePokemon.baseStats.def !== pokemon.baseStats.def || basePokemon.baseStats.spa !== pokemon.baseStats.spa || basePokemon.baseStats.spd !== pokemon.baseStats.spd || basePokemon.baseStats.spe !== pokemon.baseStats.spe
+              | Stats:
+              br
+              if basePokemon.baseStats.hp !== pokemon.baseStats.hp
+                | HP: #{basePokemon.baseStats.hp} -> #{pokemon.baseStats.hp}
+                br
+              if basePokemon.baseStats.atk !== pokemon.baseStats.atk
+                | ATK: #{basePokemon.baseStats.atk} -> #{pokemon.baseStats.atk}
+                br
+              if basePokemon.baseStats.def !== pokemon.baseStats.def
+                | DEF: #{basePokemon.baseStats.def} -> #{pokemon.baseStats.def}
+                br
+              if basePokemon.baseStats.spa !== pokemon.baseStats.spa
+                | SPA: #{basePokemon.baseStats.spa} -> #{pokemon.baseStats.spa}
+                br
+              if basePokemon.baseStats.spd !== pokemon.baseStats.spd
+                | SPD: #{basePokemon.baseStats.spd} -> #{pokemon.baseStats.spd}
+                br
+              if basePokemon.baseStats.spe !== pokemon.baseStats.spe
+                | SPE: #{basePokemon.baseStats.spe} -> #{pokemon.baseStats.spe}
+                br
+              | Learnset will be implemented in the future
+        else
+          img(src=`https://play.thetrainercorner.net/sprites/fakemons/${pokemon.name.replace(/ /g, "").replace(/-/g, "").replace(/\./g, "").replace(/é/g, "e").replace(/Pa'u/g, "Pau").replace(/\’/g, "").replace(/:/g, "").replace(/%/g, "").toLowerCase()}.png`, style="width:80px;").card-img-center.mx-auto.d-block
+          | TTC's Fakemon
+          br
+          | Types #{pokemon.types.join(" | ")}
+          br
+          | 1st Ability: #{pokemon.abilities[0]}
+          br
+          if pokemon.abilities[1]
+            | 2nd Ability: #{pokemon.abilities[1]}
+            br
+          if pokemon.abilities['H']
+            | Hidden Ability: #{pokemon.abilities['H']}
+            br
+          | Stats:
+          br
+          | HP: #{pokemon.baseStats.hp}
+          br
+          | ATK: #{pokemon.baseStats.atk}
+          br
+          | DEF: #{pokemon.baseStats.def}
+          br
+          | SPA: #{pokemon.baseStats.spa}
+          br
+          | SPD: #{pokemon.baseStats.spd}
+          br
+          | SPE: #{pokemon.baseStats.spe}

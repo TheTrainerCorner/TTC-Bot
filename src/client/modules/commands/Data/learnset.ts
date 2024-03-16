@@ -1,7 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { BaseCommand } from "../../../bases/BaseCommand";
 import CommandContext from "../../../contexts/CommandContext";
-import Grabbers from "../../../utils/grabbers";
+import Grabbers from "../../../../global/grabbers";
 
 export default class LearnsetCommand extends BaseCommand {
   constructor() {

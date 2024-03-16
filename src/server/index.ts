@@ -1,6 +1,7 @@
 import express from "express";
 import { Config } from "../global/config";
 import discordRouter from "./routes/discord";
+import changeRouter from "./routes/changes";
 import path from "path";
 const app = express();
 
@@ -10,6 +11,7 @@ try {
 
   // Routes
   app.use("/api/discord", discordRouter);
+  app.use("/changes", changeRouter);
 
   // Express settings
   app.set("view engine", "pug");
