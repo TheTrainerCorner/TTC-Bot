@@ -28,7 +28,7 @@ export default class SendReplayServerEvent extends BaseServerEvent {
     const analyzer = new Analyzer();
     const isDone = analyzer.analyze(data.log);
     embed.setTitle(`${data.players[0]} vs ${data.players[1]}`);
-    embed.setURL(`https://replay.thetrainercorner.net/${data.id}`);
+    embed.setURL(`https://replay.thetrainercorner.net/ttc/${data.id}`);
     embed.setColor(`Green`);
     const analyze = analyzer.data;
     if (isDone) {
