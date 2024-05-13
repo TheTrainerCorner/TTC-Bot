@@ -10,4 +10,4 @@ const ReplayChannelSchema = new Schema<IReplayChannel>({
   channel_id: String,
 });
 
-export default model<IReplayChannel>("replay_channels", ReplayChannelSchema);
+export default model<IReplayChannel>("replaychannels", ReplayChannelSchema);
