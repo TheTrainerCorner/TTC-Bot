@@ -15,6 +15,7 @@ export class Analyzer implements IAnalyzer {
         nickname: string;
         pokemon: string;
         kills: number;
+        inflicted: [string, string][];
         isDead: boolean;
       }[];
     };
@@ -24,6 +25,7 @@ export class Analyzer implements IAnalyzer {
         nickname: string;
         pokemon: string;
         kills: number;
+        inflicted: [string, string][];
         isDead: boolean;
       }[];
     };
@@ -33,6 +35,7 @@ export class Analyzer implements IAnalyzer {
         nickname: string;
         pokemon: string;
         kills: number;
+        inflicted: [string, string][];
         isDead: boolean;
       }[];
     };
@@ -42,6 +45,7 @@ export class Analyzer implements IAnalyzer {
         nickname: string;
         pokemon: string;
         kills: number;
+        inflicted: [string, string][];
         isDead: boolean;
       }[];
     };
@@ -63,6 +67,7 @@ export class Analyzer implements IAnalyzer {
 
   analyze(log: string): boolean {
     try {
+	let lastCauseOfDamage = "";
       let lines = log.split("\n");
       for (let line of lines) {
         let sections = line.split("|");
@@ -87,6 +92,7 @@ export class Analyzer implements IAnalyzer {
                 nickname: "",
                 pokemon: sections[1].split(",")[0].replace("-*", ""),
                 kills: 0,
+                inflicted: [],
                 isDead: false,
               });
             } else {
@@ -94,6 +100,7 @@ export class Analyzer implements IAnalyzer {
                 nickname: "",
                 pokemon: sections[1].split(",")[0].replace("-*", ""),
                 kills: 0,
+                inflicted: [],
                 isDead: false,
               });
             }
@@ -168,26 +175,55 @@ export class Analyzer implements IAnalyzer {
               )!.nickname = ste[1].trim();
             }
             break;
+          case "-status":
+            // |-status|Cinccino|slp
+            let sset = sections[0].split(":");
+            if (sset[0].replace("a", "") === "p1") {
+              let pokemon = this.data.p2.pokemon.find(
+                (x) => x.pokemon === this.data.current.p2
+              );
+              pokemon?.inflicted.push([sections[1], this.data.current.p1]);
+            } else if (sset[0].replace("a", "") === "p2") {
+              let pokemon = this.data.p1.pokemon.find(
+                (x) => x.pokemon === this.data.current.p1
+              );
+              pokemon?.inflicted.push([sections[1], this.data.current.p2]);
+            }
+            break;
+          case "damage":
+			if (sections.length == 2) {
+				lastCauseOfDamage = sections[0].split(":")[0].replace("a", "") === "p1" ? this.data.current.p2 : this.data.current.p1;
+			} else if (sections[2].split("[from] ")[1].startsWith("item")) {
+				lastCauseOfDamage = "Item";
+			} else {
+				// Assume it is a status condition
+				lastCauseOfDamage = `status:${sections[2].split("[from]")[1].trim()}`;
+			}
+            break;
           case "faint":
             let set = sections[0].split(":");
-            if (set[0].replace("a", "") === "p1") {
-              this.data.p1.pokemon.find(
-                (x) =>
-                  x.pokemon === set[1].trim() || x.nickname == set[1].trim()
-              )!.isDead = true;
-              this.data.p2.pokemon.find(
-                (x) => x.pokemon === this.data.current.p2
-              )!.kills += 1;
-            } else {
-              this.data.p2.pokemon.find(
-                (x) =>
-                  x.pokemon === set[1].trim() || x.nickname == set[1].trim()
-              )!.isDead = true;
-              console.log(this.data.current.p1);
-              this.data.p1.pokemon.find(
-                (x) => x.pokemon === this.data.current.p1
-              )!.kills += 1;
-            }
+			if (set[0].replace("a", "") === "p1") {
+				let poke = this.data.p1.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
+				poke!.isDead = true;
+				if (lastCauseOfDamage.startsWith("status:")) {
+					let opp = this.data.p2.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
+					opp!.kills++;
+				} else {
+					let opp = this.data.p2.pokemon.find(x => x.pokemon === this.data.current.p2);
+					opp!.kills++;
+				}
+			}
+			else if (set[0].replace("a", "") === "p2") {
+				let poke = this.data.p2.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
+				poke!.isDead = true;
+				if (lastCauseOfDamage.startsWith("status:")) {
+					let opp = this.data.p1.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
+					opp!.kills++;
+				} else {
+					let opp = this.data.p1.pokemon.find(x => x.pokemon === this.data.current.p1);
+					opp!.kills++;
+				}
+			}
             break;
         }
       }

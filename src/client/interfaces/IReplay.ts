@@ -6,6 +6,7 @@ export interface IAnalyzer {
       p3?: string,
       p4?: string,
     },
+
     winner: string,
     p1: {
       username: string,
@@ -13,6 +14,7 @@ export interface IAnalyzer {
         nickname: string,
         pokemon: string,
         kills: number,
+		inflicted: [string, string][],
         isDead: boolean,
       }[],
     },
@@ -22,6 +24,7 @@ export interface IAnalyzer {
         nickname: string,
         pokemon: string,
         kills: number,
+		inflicted: [string, string][],
         isDead: boolean,
       }[],
     },
@@ -31,6 +34,7 @@ export interface IAnalyzer {
         nickname: string,
         pokemon: string,
         kills: number,
+		inflicted: [string, string][],
         isDead: boolean,
       }[],
     },
@@ -40,6 +44,7 @@ export interface IAnalyzer {
         nickname: string,
         pokemon: string,
         kills: number,
+		inflicted: [string, string][],
         isDead: boolean,
       }[],
     }

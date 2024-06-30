@@ -39,7 +39,7 @@ export default class AnalyzeReplayCommand extends BaseCommand {
     const analyzer = new Analyzer();
     const isDone = analyzer.analyze(replay.log);
     embed.setTitle(`${replay.players[0]} vs ${replay.players[1]}`);
-    embed.setURL(`https://replay.thetrainercorner.net/${replay.id}`);
+    embed.setURL(`https://replay.thetrainercorner.net/replays/ttc/{replay.id}`);
     embed.setColor(`Green`);
     const analyze = analyzer.data;
     if (isDone) {
