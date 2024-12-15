@@ -12,7 +12,7 @@ export default class GuildMemberRemove extends BaseEvent {
 
 		embed.setTitle('Member Left');
 		embed.setAuthor({
-			name: `${member}`,
+			name: `${member.displayName}`,
 			iconURL: member.displayAvatarURL(),
 		});
 		embed.setTimestamp(Date.now());
