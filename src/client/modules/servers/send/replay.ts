@@ -4,6 +4,7 @@ import ReplayChannels from "../../../../database/models/replayChannel";
 import BaseServerEvent from "../../../bases/BaseServerEvent";
 import { client } from "../../../core/client";
 import { Analyzer } from "../../../core/analyzer";
+import Handler from "../../../utils/handler";
 
 export default class SendReplayServerEvent extends BaseServerEvent {
   constructor() {
@@ -31,6 +32,11 @@ export default class SendReplayServerEvent extends BaseServerEvent {
     embed.setURL(`https://replay.thetrainercorner.net/replays/ttc/${data.id}`);
     embed.setColor(`Green`);
     const analyze = analyzer.data;
+    switch (data.format) {
+      case "[Gen 9] National Dex Random":
+        await new Handler().handleMonitors('elo', analyzer);
+        break;
+    }
     if (isDone) {
       let str = "";
       str += `||Winner: ${analyze.winner}\n`;
