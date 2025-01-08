@@ -22,7 +22,7 @@ export default class LeaderboardCommand extends BaseCommand {
         embed.setColor('Random');
         for(let i = 0; i < (sorted.length >= 15 ? 15 : sorted.length); i++) {
             embed.addFields([
-                { name: `${sorted[i].showdownUsername} - ELO: ${sorted[i].elo}`, value: `Discord: <@${sorted[i].discordId}>\nWins: ${sorted[i].wins}\nLosses: ${sorted[i].losses}\nMatches Played: ${sorted[i].matchesPlayed}`},
+                { name: `[${i + 1}] ${sorted[i].showdownUsername} - ELO: ${sorted[i].elo}`, value: `Discord: <@${sorted[i].discordId}>\nWins: ${sorted[i].wins}\nLosses: ${sorted[i].losses}\nMatches Played: ${sorted[i].matchesPlayed}`},
             ])
         }
 
