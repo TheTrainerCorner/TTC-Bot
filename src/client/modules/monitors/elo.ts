@@ -52,7 +52,9 @@ export default class EloMonitor extends BaseMonitor {
 
         // const aScore = Math.floor(Math.round(ka * ((data.winner === data.p1.username ? 1 : 0) - expected)));
         // const bScore = Math.floor(Math.round(kb * ((data.winner === data.p2.username ? 1 : 0) - expected)));
-        
+        console.log(aScore);
+        console.log(bScore);
+        console.log(data.winner, data.p1.username, data.p2.username);
         player1.elo += aScore;
         player1.matchesPlayed++;
         player2.elo += bScore;
