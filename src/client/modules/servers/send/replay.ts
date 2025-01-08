@@ -12,7 +12,14 @@ export default class SendReplayServerEvent extends BaseServerEvent {
   }
 
   public async invoke(data: IReplay) {
-    console.log(data);
+    const analyzer = new Analyzer();
+    const isDone = analyzer.analyze(data.log);
+    switch (data.format) {
+      // Now it should trigger regardless
+      case "[Gen 9] National Dex Randoms":
+        await new Handler().handleMonitors('elo', analyzer);
+        break;
+    }
     const replayChannel = await ReplayChannels.findOne({
       format_id: data.format,
     });
@@ -23,23 +30,15 @@ export default class SendReplayServerEvent extends BaseServerEvent {
       replayChannel.channel_id
     )) as TextChannel;
 
+    if (!channel) return;
 
     const embed = new EmbedBuilder();
-
-    const analyzer = new Analyzer();
-    const isDone = analyzer.analyze(data.log);
+    
     embed.setTitle(`${data.players[0]} vs ${data.players[1]}`);
     embed.setURL(`https://replay.thetrainercorner.net/replays/ttc/${data.id}`);
     embed.setColor(`Green`);
     const analyze = analyzer.data;
     
-    switch (data.format) {
-      case "[Gen 9] National Dex Randoms":
-        await new Handler().handleMonitors('elo', analyzer);
-        break;
-    }
-
-    if (!channel) return;
     if (isDone) {
       let str = "";
       str += `||Winner: ${analyze.winner}\n`;
