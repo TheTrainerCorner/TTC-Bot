@@ -9,6 +9,7 @@ export default class EloMonitor extends BaseMonitor {
 
     public async invoke(analyzer: Analyzer) {
         const data = analyzer.data;
+        console.log('Success');
 
         let player1 = await Player.findOne({ showdownUsername: data.p1.username});
         let player2 = await Player.findOne({ showdownUsername: data.p2.username});
