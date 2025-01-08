@@ -33,7 +33,7 @@ export default class SendReplayServerEvent extends BaseServerEvent {
     embed.setColor(`Green`);
     const analyze = analyzer.data;
     switch (data.format) {
-      case "[Gen 9] National Dex Random":
+      case "[Gen 9] National Dex Randoms":
         await new Handler().handleMonitors('elo', analyzer);
         break;
     }
