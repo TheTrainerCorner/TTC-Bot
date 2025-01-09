@@ -47,7 +47,7 @@ export default class EloMonitor extends BaseMonitor {
 
         const aScore = Math.floor(Math.round(ka * ((data.winner === data.p1.username ? 1 : 0) - expected)));
         const bScore = Math.floor(Math.round(kb * ((data.winner === data.p2.username ? 1 : 0) - expected)));
-        
+        console.debug(step1, step2, step3, expected, ka, kb);
         player1.elo += aScore;
         player1.matchesPlayed++;
         player2.elo += bScore;
