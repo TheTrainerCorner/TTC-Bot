@@ -65,7 +65,7 @@ export class Analyzer implements IAnalyzer {
     },
   };
 
-  analyze(log: string): boolean {
+  analyze(log: string, format: string): boolean {
     try {
 	let lastCauseOfDamage = "";
       let lines = log.split("\n");
@@ -157,25 +157,46 @@ export class Analyzer implements IAnalyzer {
             break;
           case "switch":
           case "drag":
-            let ste = sections[0].split(":");
-            if (ste[0].replace("a", "") === "p1") {
-              this.data.current.p1 = sections[1].includes(",")
-                ? sections[1].split(",")[0]
-                : sections[1];
-              console.log(this.data.p1.pokemon);
-              // if (this.data.p1.pokemon.find((x) => x.pokemon = this.data.current.p1)!.nickname !== undefined)
-              this.data.p1.pokemon.find(
-                (x) => x.pokemon === this.data.current.p1
-              )!.nickname = ste[1].trim();
+            if (format === "[Gen 9] National Dex Randoms") {
+              let ste = sections[0].split(":");
+              if (ste[0].replace("a", "") === "p1") {
+                this.data.current.p1 = sections[1].includes(",")
+                  ? sections[1].split(",")[0]
+                  : sections[1];
+                console.log(this.data.p1.pokemon);
+                if (this.data.p1.pokemon.find((x) => x.pokemon = this.data.current.p1)!.nickname !== undefined)
+                this.data.p1.pokemon.find(
+                  (x) => x.pokemon === this.data.current.p1
+                )!.nickname = ste[1].trim();
+              } else {
+                this.data.current.p2 = sections[1].includes(",")
+                  ? sections[1].split(",")[0]
+                  : sections[1];
+                if (this.data.p2.pokemon.find((x) => x.pokemon = this.data.current.p2)!.nickname !== undefined)
+                this.data.p2.pokemon.find(
+                  (x) => x.pokemon === this.data.current.p2
+                )!.nickname = ste[1].trim();
+              }
             } else {
-              this.data.current.p2 = sections[1].includes(",")
-                ? sections[1].split(",")[0]
-                : sections[1];
-                // if (this.data.p2.pokemon.find((x) => x.pokemon = this.data.current.p2)!.nickname !== undefined)
-              this.data.p2.pokemon.find(
-                (x) => x.pokemon === this.data.current.p2
-              )!.nickname = ste[1].trim();
+              let ste = sections[0].split(":");
+              if (ste[0].replace("a", "") === "p1") {
+                this.data.current.p1 = sections[1].includes(",")
+                  ? sections[1].split(",")[0]
+                  : sections[1];
+                console.log(this.data.p1.pokemon);
+                this.data.p1.pokemon.find(
+                  (x) => x.pokemon === this.data.current.p1
+                )!.nickname = ste[1].trim();
+              } else {
+                this.data.current.p2 = sections[1].includes(",")
+                  ? sections[1].split(",")[0]
+                  : sections[1];
+                this.data.p2.pokemon.find(
+                  (x) => x.pokemon === this.data.current.p2
+                )!.nickname = ste[1].trim();
+              }
             }
+            
             break;
           case "-status":
             // |-status|Cinccino|slp

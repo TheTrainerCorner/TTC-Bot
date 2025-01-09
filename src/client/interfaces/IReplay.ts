@@ -50,5 +50,5 @@ export interface IAnalyzer {
     }
   };
 
-  analyze(log: string): boolean;
+  analyze(log: string, format: string): boolean;
 }
