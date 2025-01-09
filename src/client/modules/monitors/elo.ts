@@ -2,6 +2,7 @@ import BaseMonitor from "../../bases/BaseMonitor";
 import { Analyzer } from "../../core/analyzer";
 import Player from "../../../database/models/player";
 import player from "../../../database/models/player";
+import { calculateElo } from "../../utils/calculations";
 export default class EloMonitor extends BaseMonitor {
     constructor() {
         super('elo');
@@ -28,37 +29,32 @@ export default class EloMonitor extends BaseMonitor {
             player2 = await newPlayer.save();
         }
 
-        const a = player1!.elo;
-        const b = player2!.elo;
+        // This is using Showdown's elo system.
+        // The K factor determines how much your elo changes when you win or lose games.
+        // Larger K means more change.
+        // In the "original" Elo, K is constant, but it's common for K to
+        // get smaller as your rating goes up
+        
+        // Scores: 1 = Win, 0.5 = Draw, 0 = Losses; Draws are very unlikely to happen.
+        const p1score = data.winner === data.p1.username ? 1 : data.winner === '' ? 0.5 : 0;
+        const p2score = data.winner === data.p2.username ? 1 : data.winner === '' ? 0.5 : 0;
 
-        const step1 = Math.floor(Math.round(b - a));
-        const step2 = Math.floor(Math.round(step1 / 400));
-        const step3 = Math.floor(Math.round(Math.pow(10, (step2 + 1))));
-        const expected = Math.floor(Math.round(1 / step3));
+        const p1NewElo = calculateElo(player1.elo, p1score, player2.elo);
+        const p2NewElo = calculateElo(player2.elo, p2score, player1.elo);
 
-        const ka = a <= 1000 ? 40 :
-                    a >= 1000 && a <= 1200 ? 30 :
-                     a >= 1200 && a <= 1600 ? 20 :
-                      a >= 1600 ? 10 : 40;
-        const kb = b <= 1000 ? 40 :
-                    b >= 1000 && b <= 1200 ? 30 :
-                     b >= 1200 && b <= 1600 ? 20 :
-                      b >= 1600 ? 10 : 40;
+        player1.elo = p1NewElo;
+        player2.elo = p2NewElo;
 
-        const aScore = Math.floor(Math.round(ka * ((data.winner === data.p1.username ? 1 : 0) - expected)));
-        const bScore = Math.floor(Math.round(kb * ((data.winner === data.p2.username ? 1 : 0) - expected)));
-        console.debug(step1, step2, step3, expected, ka, kb);
-        player1.elo += aScore;
-        player1.matchesPlayed++;
-        player2.elo += bScore;
-        player2.matchesPlayed++;
         if (data.winner === data.p1.username) {
             player1.wins++;
-            player2.losses++;
-        } else if (data.winner === data.p1.username) {
+            player2.losses++
+        } else if (data.winner === data.p2.username) {
             player1.losses++;
             player2.wins++;
         }
+
+        player1.matchesPlayed++;
+        player2.matchesPlayed++;
 
         await player1.save();
         await player2.save();
