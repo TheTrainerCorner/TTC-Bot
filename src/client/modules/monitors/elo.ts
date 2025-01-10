@@ -42,8 +42,8 @@ export default class EloMonitor extends BaseMonitor {
         const p1NewElo = calculateElo(player1.elo, p1score, player2.elo);
         const p2NewElo = calculateElo(player2.elo, p2score, player1.elo);
 
-        player1.elo = p1NewElo;
-        player2.elo = p2NewElo;
+        player1.elo = Math.floor(Math.round(p1NewElo));
+        player2.elo = Math.floor(Math.round(p2NewElo));
 
         if (data.winner === data.p1.username) {
             player1.wins++;
