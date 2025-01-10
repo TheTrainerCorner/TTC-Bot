@@ -227,6 +227,7 @@ export class Analyzer implements IAnalyzer {
             let set = sections[0].split(":");
 			if (set[0].replace("a", "") === "p1") {
 				let poke = this.data.p1.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
+        if (poke === undefined) break;
 				poke!.isDead = true;
 				if (lastCauseOfDamage.startsWith("status:")) {
 					let opp = this.data.p2.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
@@ -238,6 +239,7 @@ export class Analyzer implements IAnalyzer {
 			}
 			else if (set[0].replace("a", "") === "p2") {
 				let poke = this.data.p2.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
+        if (poke === undefined) break;
 				poke!.isDead = true;
 				if (lastCauseOfDamage.startsWith("status:")) {
 					let opp = this.data.p1.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
