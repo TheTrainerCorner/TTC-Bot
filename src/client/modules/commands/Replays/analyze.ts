@@ -44,31 +44,31 @@ export default class AnalyzeReplayCommand extends BaseCommand {
     const analyze = analyzer.data;
     if (isDone) {
       let str = "";
-      str += `||Winner: ${analyze.winner}\n`;
-      let score = analyze.p1.pokemon.length;
-      analyze.p1.pokemon.forEach((x) => {
+      str += `||Winner: ${analyze?.winner}\n`;
+      let score = analyze?.p1.pokemon.length || 6;
+      analyze?.p1.pokemon.forEach((x) => {
         if (x.isDead) score -= 1;
       });
       str += "Score: ";
       str += `${score}`;
       str += "-";
-      score = analyze.p2.pokemon.length;
-      analyze.p2.pokemon.forEach((x) => {
+      score = analyze?.p2.pokemon.length || 6;
+      analyze?.p2.pokemon.forEach((x) => {
         if (x.isDead) score -= 1;
       });
 
       str += `${score}||`;
       str += "\n";
       str += "\n";
-      str += `${analyze.p1.username}\n||`;
-      analyze.p1.pokemon.forEach((x) => {
+      str += `${analyze?.p1.username}\n||`;
+      analyze?.p1.pokemon.forEach((x) => {
         str += `${x.pokemon} | ${x.kills} kills | Death: ${
           x.isDead ? "❌" : "✅"
         }\n`;
       });
       str += "||\n";
-      str += `${analyze.p2.username}\n||`;
-      analyze.p2.pokemon.forEach((x) => {
+      str += `${analyze?.p2.username}\n||`;
+      analyze?.p2.pokemon.forEach((x) => {
         str += `${x.pokemon} | ${x.kills} kills | Death: ${
           x.isDead ? "❌" : "✅"
         }\n`;

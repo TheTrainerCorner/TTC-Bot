@@ -1,7 +1,7 @@
 import { IAnalyzer } from "../interfaces/IReplay";
 
 export class Analyzer implements IAnalyzer {
-  data: {
+  data?: {
     current: {
       p1: string;
       p2: string;
@@ -67,6 +67,7 @@ export class Analyzer implements IAnalyzer {
 
   analyze(log: string, format: string): boolean {
     try {
+
 	let lastCauseOfDamage = "";
       let lines = log.split("\n");
       for (let line of lines) {
@@ -77,18 +78,19 @@ export class Analyzer implements IAnalyzer {
         switch (action) {
           case "player":
             if (sections[0] == "p1") {
-              if (sections[1] !== this.data.p1!.username) {
-                this.data.p1!.username = sections[1];
+              if (sections[1] !== this.data?.p1!.username) {
+                this.data!.p1!.username = sections[1];
               }
             } else {
-              if (sections[1] !== this.data.p2!.username) {
-                this.data.p2!.username = sections[1];
+              if (sections[1] !== this.data?.p2!.username) {
+                this.data!.p2!.username = sections[1];
               }
             }
             break;
           case "poke":
+            if (["[Gen 9] National Dex Randoms"].includes(format)) break;
             if (sections[0] === "p1") {
-              this.data.p1.pokemon.push({
+              this.data!.p1.pokemon.push({
                 nickname: "",
                 pokemon: sections[1].split(",")[0].replace("-*", ""),
                 kills: 0,
@@ -96,7 +98,7 @@ export class Analyzer implements IAnalyzer {
                 isDead: false,
               });
             } else {
-              this.data.p2.pokemon.push({
+              this.data!.p2.pokemon.push({
                 nickname: "",
                 pokemon: sections[1].split(",")[0].replace("-*", ""),
                 kills: 0,
@@ -106,7 +108,7 @@ export class Analyzer implements IAnalyzer {
             }
             break;
           case "win":
-            this.data.winner = sections[0];
+            this.data!.winner = sections[0];
             console.log("Done Analyzing!");
             /**
              * Structure
@@ -134,88 +136,92 @@ export class Analyzer implements IAnalyzer {
 
             return true;
           case "detailschange":
+            if (["[Gen 9] National Dex Randoms"].includes(format)) break;
             let tes = sections[0].split(":");
             if (tes[0].replace("a", "") === "p1") {
-              this.data.p1.pokemon.find(
-                (x) => x.pokemon === this.data.current.p1
+              this.data!.p1.pokemon.find(
+                (x) => x.pokemon === this.data!.current.p1
               )!.pokemon = sections[1].includes(",")
                 ? sections[1].split(",")[0]
                 : sections[1];
-              this.data.current.p1 = sections[1].includes(",")
+              this.data!.current.p1 = sections[1].includes(",")
                 ? sections[1].split(",")[0]
                 : sections[1];
             } else {
-              this.data.p2.pokemon.find(
-                (x) => x.pokemon === this.data.current.p2
+              this.data!.p2.pokemon.find(
+                (x) => x.pokemon === this.data!.current.p2
               )!.pokemon = sections[1].includes(",")
                 ? sections[1].split(",")[0]
                 : sections[1];
-              this.data.current.p2 = sections[1].includes(",")
+              this.data!.current.p2 = sections[1].includes(",")
                 ? sections[1].split(",")[0]
                 : sections[1];
             }
             break;
           case "switch":
           case "drag":
+            if (["[Gen 9] National Dex Randoms"].includes(format)) break;
             if (format === "[Gen 9] National Dex Randoms") {
               let ste = sections[0].split(":");
               if (ste[0].replace("a", "") === "p1") {
-                this.data.current.p1 = sections[1].includes(",")
+                this.data!.current.p1 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
-                console.log(this.data.p1.pokemon);
-                if (this.data.p1.pokemon.find((x) => x.pokemon = this.data.current.p1) !== undefined)
-                this.data.p1.pokemon.find(
-                  (x) => x.pokemon === this.data.current.p1
+                console.log(this.data!.p1.pokemon);
+                if (this.data!.p1.pokemon.find((x) => x.pokemon = this.data!.current.p1) !== undefined)
+                this.data!.p1.pokemon.find(
+                  (x) => x.pokemon === this.data!.current.p1
                 )!.nickname = ste[1].trim();
               } else {
-                this.data.current.p2 = sections[1].includes(",")
+                this.data!.current.p2 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
-                if (this.data.p2.pokemon.find((x) => x.pokemon = this.data.current.p2) !== undefined)
-                this.data.p2.pokemon.find(
-                  (x) => x.pokemon === this.data.current.p2
+                if (this.data!.p2.pokemon.find((x) => x.pokemon = this.data!.current.p2) !== undefined)
+                this.data!.p2.pokemon.find(
+                  (x) => x.pokemon === this.data!.current.p2
                 )!.nickname = ste[1].trim();
               }
             } else {
               let ste = sections[0].split(":");
               if (ste[0].replace("a", "") === "p1") {
-                this.data.current.p1 = sections[1].includes(",")
+                this.data!.current.p1 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
-                console.log(this.data.p1.pokemon);
-                this.data.p1.pokemon.find(
-                  (x) => x.pokemon === this.data.current.p1
+                console.log(this.data!.p1.pokemon);
+                this.data!.p1.pokemon.find(
+                  (x) => x.pokemon === this.data!.current.p1
                 )!.nickname = ste[1].trim();
               } else {
-                this.data.current.p2 = sections[1].includes(",")
+                this.data!.current.p2 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
-                this.data.p2.pokemon.find(
-                  (x) => x.pokemon === this.data.current.p2
+                this.data!.p2.pokemon.find(
+                  (x) => x.pokemon === this.data!.current.p2
                 )!.nickname = ste[1].trim();
               }
             }
             
             break;
           case "-status":
+            if (["[Gen 9] National Dex Randoms"].includes(format)) break;
             // |-status|Cinccino|slp
             let sset = sections[0].split(":");
             if (sset[0].replace("a", "") === "p1") {
-              let pokemon = this.data.p2.pokemon.find(
-                (x) => x.pokemon === this.data.current.p2
+              let pokemon = this.data!.p2.pokemon.find(
+                (x) => x.pokemon === this.data!.current.p2
               );
-              pokemon?.inflicted.push([sections[1], this.data.current.p1]);
+              pokemon?.inflicted.push([sections[1], this.data!.current.p1]);
             } else if (sset[0].replace("a", "") === "p2") {
-              let pokemon = this.data.p1.pokemon.find(
-                (x) => x.pokemon === this.data.current.p1
+              let pokemon = this.data!.p1.pokemon.find(
+                (x) => x.pokemon === this.data!.current.p1
               );
-              pokemon?.inflicted.push([sections[1], this.data.current.p2]);
+              pokemon?.inflicted.push([sections[1], this.data!.current.p2]);
             }
             break;
           case "damage":
+            if (["[Gen 9] National Dex Randoms"].includes(format)) break;
 			if (sections.length == 2) {
-				lastCauseOfDamage = sections[0].split(":")[0].replace("a", "") === "p1" ? this.data.current.p2 : this.data.current.p1;
+				lastCauseOfDamage = sections[0].split(":")[0].replace("a", "") === "p1" ? this.data!.current.p2 : this.data!.current.p1;
 			} else if (sections[2].split("[from] ")[1].startsWith("item")) {
 				lastCauseOfDamage = "Item";
 			} else {
@@ -224,28 +230,29 @@ export class Analyzer implements IAnalyzer {
 			}
             break;
           case "faint":
+            if (["[Gen 9] National Dex Randoms"].includes(format)) break;
             let set = sections[0].split(":");
 			if (set[0].replace("a", "") === "p1") {
-				let poke = this.data.p1.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
+				let poke = this.data!.p1.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
         if (poke === undefined) break;
 				poke!.isDead = true;
 				if (lastCauseOfDamage.startsWith("status:")) {
-					let opp = this.data.p2.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
+					let opp = this.data!.p2.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
 					opp!.kills++;
 				} else {
-					let opp = this.data.p2.pokemon.find(x => x.pokemon === this.data.current.p2);
+					let opp = this.data!.p2.pokemon.find(x => x.pokemon === this.data!.current.p2);
 					opp!.kills++;
 				}
 			}
 			else if (set[0].replace("a", "") === "p2") {
-				let poke = this.data.p2.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
+				let poke = this.data!.p2.pokemon.find(x => x.pokemon === set[1].trim() || x.nickname === set[1].trim());
         if (poke === undefined) break;
 				poke!.isDead = true;
 				if (lastCauseOfDamage.startsWith("status:")) {
-					let opp = this.data.p1.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
+					let opp = this.data!.p1.pokemon.find(x => x.inflicted.includes([poke!.pokemon, lastCauseOfDamage.split(":")[1].trim()]));
 					opp!.kills++;
 				} else {
-					let opp = this.data.p1.pokemon.find(x => x.pokemon === this.data.current.p1);
+					let opp = this.data!.p1.pokemon.find(x => x.pokemon === this.data!.current.p1);
 					opp!.kills++;
 				}
 			}

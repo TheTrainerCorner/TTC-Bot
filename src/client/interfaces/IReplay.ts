@@ -1,5 +1,5 @@
 export interface IAnalyzer {
-  data: {
+  data?: {
     current: {
       p1: string,
       p2: string,
@@ -10,7 +10,7 @@ export interface IAnalyzer {
     winner: string,
     p1: {
       username: string,
-      pokemon: {
+      pokemon?: {
         nickname: string,
         pokemon: string,
         kills: number,
@@ -20,7 +20,7 @@ export interface IAnalyzer {
     },
     p2: {
       username: string,
-      pokemon: {
+      pokemon?: {
         nickname: string,
         pokemon: string,
         kills: number,
