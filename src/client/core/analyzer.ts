@@ -167,7 +167,8 @@ export class Analyzer implements IAnalyzer {
                 this.data!.current.p1 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
-                console.log(this.data!.p1.pokemon);
+                this.data!.current.p1 = this.data!.current.p1.replace("-Crowned", "");
+                // console.log(this.data!.p1.pokemon);
                 if (this.data!.p1.pokemon.find((x) => x.pokemon = this.data!.current.p1) !== undefined)
                 this.data!.p1.pokemon.find(
                   (x) => x.pokemon === this.data!.current.p1
@@ -176,6 +177,7 @@ export class Analyzer implements IAnalyzer {
                 this.data!.current.p2 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
+                this.data!.current.p2 = this.data!.current.p2.replace("-Crowned", "");
                 if (this.data!.p2.pokemon.find((x) => x.pokemon = this.data!.current.p2) !== undefined)
                 this.data!.p2.pokemon.find(
                   (x) => x.pokemon === this.data!.current.p2
@@ -187,7 +189,8 @@ export class Analyzer implements IAnalyzer {
                 this.data!.current.p1 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
-                console.log(this.data!.p1.pokemon);
+                this.data!.current.p1 = this.data!.current.p1.replace("-Crowned", "");
+                // console.log(this.data!.p1.pokemon);
                 this.data!.p1.pokemon.find(
                   (x) => x.pokemon === this.data!.current.p1
                 )!.nickname = ste[1].trim();
@@ -195,6 +198,9 @@ export class Analyzer implements IAnalyzer {
                 this.data!.current.p2 = sections[1].includes(",")
                   ? sections[1].split(",")[0]
                   : sections[1];
+                this.data!.current.p2 = this.data!.current.p2.replace("-Crowned", "");
+                // console.log(sections[1]);
+                // console.log(this.data?.p2.pokemon);
                 this.data!.p2.pokemon.find(
                   (x) => x.pokemon === this.data!.current.p2
                 )!.nickname = ste[1].trim();
