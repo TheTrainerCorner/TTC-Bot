@@ -14,12 +14,7 @@ export default class SendReplayServerEvent extends BaseServerEvent {
   public async invoke(data: IReplay) {
     const analyzer = new Analyzer();
     const isDone = analyzer.analyze(data.log, data.format);
-    switch (data.format) {
-      // Now it should trigger regardless
-      case "[Gen 9] National Dex Randoms":
-        await new Handler().handleMonitors('elo', analyzer);
-        break;
-    }
+    
     const replayChannel = await ReplayChannels.findOne({
       format_id: data.format,
     });
