@@ -60,8 +60,10 @@ export default class VerifyCommand extends BaseCommand {
 			return;
 		}
 		
-
+		const notVerifiedRoleId = "1347046840868278322";
 		await (ctx.interaction.member!.roles as GuildMemberRoleManager).add("997670503256965171");
+		await (ctx.interaction.member!.roles as GuildMemberRoleManager).remove(notVerifiedRoleId);
+		
 		let embed = new EmbedBuilder();
 		embed.setTitle('You are now Verified!');
 		embed.setDescription(`Enjoy your stay in The Trainer's Corner!`);
